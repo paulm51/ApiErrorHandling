@@ -39,10 +39,16 @@ namespace ApiErrorHandling
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiErrorHandling v1"));
+                //app.UseDeveloperExceptionPage();  // Will return the complete exception in the response body
+                app.UseExceptionHandler("/error-local-development");   // Will return the complete exception wrapped in Problem Details in the response body
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiErrorHandling v1"));
 
             app.UseHttpsRedirection();
 

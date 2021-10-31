@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,27 @@ namespace ApiErrorHandling.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet]
+        [Route("{city}")]
+        public IActionResult GetByCity(string city)
+        {
+            if (string.IsNullOrEmpty(city)) return BadRequest($"City is required.");
+
+            if (city.ToLower() == "gondor")
+            {
+                throw new ArgumentException("We don't support Lord of the Rings universe.");
+            }
+
+            var rng = new Random();
+            return Ok(Enumerable.Range(1, 5).Select(index => new WeatherForecast
+                {
+                    Date = DateTime.Now.AddDays(index),
+                    TemperatureC = rng.Next(-20, 55),
+                    Summary = Summaries[rng.Next(Summaries.Length)]
+                })
+                .ToArray());
         }
     }
 }
